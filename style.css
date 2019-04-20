@@ -1,0 +1,47 @@
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#camera{
+    height: 90%;
+}
+
+#camera-view, #camera-canvas, #camera-output{
+    position: fixed;
+    transform: scaleX(-1);
+    filter: FlipH;
+}
+
+#control-buttons {
+    position: fixed;
+    bottom: 0;
+    height: 10%;
+    width: 100%;
+}
+
+#camera-trigger, #camera-switch{
+    width: 50%;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    border: 3px solid black;
+}
+
+#camera-trigger:hover, #camera-switch:hover {
+    background-color: white;
+    color: black;
+}
+
+#camera-trigger {
+    float: left;
+}
+
+#camera-switch {
+    float: right;
+}
