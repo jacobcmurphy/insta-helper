@@ -5,12 +5,39 @@ html, body{
   width: 100%;
 }
 
-#camera{
+#tools-container {
+    box-sizing: border-box;
+    display: none;
+    position: fixed;
+    z-index: 3;
+    overflow: auto;
+    left: 50%;
     height: 90%;
+    width: 50%;
+    padding: 10px;
+    background: #9099a8;
+    opacity: 0.85;
 }
 
-#camera-view, #camera-canvas, #camera-output{
-    position: fixed;
+#camera-and-text-container {
+    position: absolute;
+    height: 90%;
+    width: 100%;
+}
+
+textarea#text-container {
+    position: relative;
+    margin: 0 0 0 -1px;
+    padding: 5px;
+    resize: none;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-right: 1px solid gray;
+}
+
+#camera-view, #camera-canvas, #camera-output {
+    position: absolute;
     transform: scaleX(-1);
     filter: FlipH;
 }
@@ -20,28 +47,22 @@ html, body{
     bottom: 0;
     height: 10%;
     width: 100%;
+    background-color: black;
 }
 
-#camera-trigger, #camera-switch{
-    width: 50%;
+.control-button{
+    box-sizing: border-box;
+    width: 32%;
     background-color: black;
     color: white;
     font-size: 16px;
     border: none;
+    border-top: 1px solid black;
     padding: 15px 20px;
     text-align: center;
-    border: 3px solid black;
 }
 
-#camera-trigger:hover, #camera-switch:hover {
+.control-button:hover {
     background-color: white;
     color: black;
-}
-
-#camera-trigger {
-    float: left;
-}
-
-#camera-switch {
-    float: right;
 }

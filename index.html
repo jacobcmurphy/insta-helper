@@ -8,15 +8,40 @@
 		<link rel='stylesheet' href='style.css'>
 	</head>
 	<body>
-			<div id='camera'>
-		    <canvas id='camera-canvas'></canvas>
-		    <video id='camera-view' autoplay playsinline></video>
-		    <img src='//:0' alt='' id='camera-output'>
-		  </div>
+			<div id='tools-container'>
+				<label for='image-ratio'>Image to Text Ratio</label>
+				<input type='number' id='image-ratio' min='25' max='75'>&nbsp;%
+				<br/><br/>
+				<label for='text-size'>Text size (px)</label>
+				<input type='number' id='text-size' min='10' max='99'>
+				<br/>
+				<label for='text-color'>Text color</label>
+				<input id='text-color' class='jscolor' value='000000'>
+				<br/>
+				<label for='text-background-color'>Text background color</label>
+				<input id='text-background-color' class='jscolor' value='000000'>
+			</div>
+			<div id='camera-and-text-container'>
+				<div id='camera-container'>
+			    <canvas id='camera-canvas'></canvas>
+			    <video id='camera-view' autoplay playsinline></video>
+			    <img src='//:0' alt='' id='camera-output'>
+			  </div>
+		  	<textarea id='text-container' wrap='hard'></textarea>
+			</div>
 			<div id='control-buttons'>
-			    <button id='camera-trigger'>Take picture</button>
-			    <button id='camera-switch'>Switch Camera</button>
+			    <button id='camera-trigger' class='control-button'>Take a picture</button>
+			    <button id='camera-switch' class='control-button'>Switch Camera</button>
+			    <button id='tool-toggle' class='control-button'>Show Options</button>
 		  </div>
+
+		<!-- custom code -->
 		<script src='app.js'></script>
+
+		<!-- color picker -->
+		<script src='jscolor.js'></script>
+
+		<!-- Image filters -->
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js'></script>
 	</body>
 </html>
