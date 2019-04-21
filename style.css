@@ -32,7 +32,7 @@ html, body{
 #text-container {
     box-sizing: border-box;
     position: absolute;
-    margin: 0px 1px 0px -1px;
+    margin: 0 1px 0 -1px;
     /* text-indent with padding on the left side allows wrapped text to look auto-indented */
     padding: 5px 5px 5px 25px;
     text-indent: -20px;
@@ -50,22 +50,27 @@ html, body{
     bottom: 0;
     height: 10%;
     width: 100%;
-    background-color: black;
 }
 
-.control-button{
+.control-button {
     box-sizing: border-box;
-    width: 32%;
+    height: 100%;
+    width: 33%;
+    border: 1px solid black;
+    border-right: 1px solid white;
+    padding: 15px 20px;
     background-color: black;
     color: white;
     font-size: 16px;
-    border: none;
-    border-top: 1px solid black;
-    padding: 15px 20px;
     text-align: center;
 }
 
 .control-button:hover {
     background-color: white;
     color: black;
+}
+
+.control-button:last-child {
+    width: 34%;
+    border-right: 1px solid black;
 }

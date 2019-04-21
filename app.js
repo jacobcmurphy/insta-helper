@@ -56,8 +56,6 @@ const getConstraints = () => {
 };
 
 const positionTextAndVideo = () => {
-    // TODO - needs improvement
-    // not in correct position when switched back to right side
     const constraints = getConstraints();
     const videoHeight = constraints.video.height;
     const videoWidth = constraints.video.width;
@@ -65,7 +63,6 @@ const positionTextAndVideo = () => {
 
     textContainer.style.width = textWidth;
     textContainer.style.height = videoHeight;
-    imageRatio.value = imageTextRatio * 100;
 
     if (textSide === 'right') {
         textContainer.style.left = videoWidth;
@@ -91,7 +88,11 @@ const runCamera = () => {
         .catch(console.error);
 };
 
-window.addEventListener('load', runCamera, false);
+window.addEventListener('load', () => {
+    imageRatio.value = imageTextRatio * 100;
+    textSize.value = textContainer.style.fontSize;
+    runCamera();
+}, false);
 
 // Control buttons
 cameraTrigger.onclick = () => {
@@ -102,7 +103,6 @@ cameraTrigger.onclick = () => {
         cameraOutput.style.display = 'block';
         cameraOutput.src = cameraCanvas.toDataURL('image/webp');
         cameraTrigger.innerText = 'Take a new picture';
-        // track.stop();
     } else {
         cameraOutput.style.display = 'none';
         cameraTrigger.innerText = 'Take a picture';
@@ -116,6 +116,7 @@ cameraSwitch.onclick = () => {
     } else {
         facingMode = 'user'
     }
+    track.stop();
     runCamera();
 };
 
@@ -137,7 +138,7 @@ imageRatio.onchange = debounce((e) => {
     runCamera();
 }, 1000);
 
-textSize.onchange = (e) => {
+textSize.oninput = (e) => {
     const size = parseInt(e.target.value);
     textContainer.style.fontSize = size;
 };
@@ -152,7 +153,7 @@ textBackgroundColor.onchange = (e) => {
     textContainer.style.backgroundColor = color;
 };
 
-textLineHeight.onchange = (e) => {
+textLineHeight.oninput = (e) => {
     const size = parseFloat(e.target.value);
     textContainer.style.lineHeight = size;
 };
