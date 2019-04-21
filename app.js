@@ -1,8 +1,9 @@
-let imageTextRatio = 0.6;
 let facingMode = 'user';
 let currentlyRunningCamera = true;
 let track = null;
+let imageTextRatio = 0.6;
 let toolsShowing = false;
+let textSide = 'right';
 
 const debounce = (func, wait) => {
   let timeout;
@@ -35,17 +36,8 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
     textSize = document.querySelector('#text-size'),
     textColor = document.querySelector('#text-color'),
     textBackgroundColor = document.querySelector('#text-background-color'),
-    textLineHeight = document.querySelector('#text-line-height');
-
-// enable tab usage in textContainer
-textContainer.onkeydown = (e) => {
-    if (e.keyCode === 9 || e.which === 9) {
-        e.preventDefault();
-        let s = textContainer.selectionStart;
-        textContainer.value = textContainer.value.substring(0, textContainer.selectionStart) + '\t' + textContainer.value.substring(textContainer.selectionEnd);
-        textContainer.selectionEnd = s + 1;
-    }
-};
+    textLineHeight = document.querySelector('#text-line-height'),
+    imageTextSwap = document.querySelector('#image-text-swap');
 
 const getConstraints = () => {
     let height = cameraTextContainer.clientHeight;
@@ -63,6 +55,27 @@ const getConstraints = () => {
    };
 };
 
+const positionTextAndVideo = () => {
+    // TODO - needs improvement
+    // not in correct position when switched back to right side
+    const constraints = getConstraints();
+    const videoHeight = constraints.video.height;
+    const videoWidth = constraints.video.width;
+    const textWidth = videoHeight * (1 - imageTextRatio);
+
+    textContainer.style.width = textWidth;
+    textContainer.style.height = videoHeight;
+    imageRatio.value = imageTextRatio * 100;
+
+    if (textSide === 'right') {
+        textContainer.style.left = videoWidth;
+        cameraContainer.style.left = 0;
+    } else {
+        textContainer.style.left = 0;
+        cameraContainer.style.left = textWidth;
+    }
+};
+
 const runCamera = () => {
     const constraints = getConstraints();
     return navigator.mediaDevices
@@ -71,11 +84,7 @@ const runCamera = () => {
             const height = constraints.video.height;
             const width = constraints.video.width;
 
-            textContainer.style.left = width;
-            textContainer.style.height = height;
-            textContainer.style.width = height * (1 - imageTextRatio);
-            imageRatio.value = imageTextRatio * 100;
-
+            positionTextAndVideo(width, height);
             track = stream.getTracks()[0];
             cameraView.srcObject = stream;
         })
@@ -146,4 +155,9 @@ textBackgroundColor.onchange = (e) => {
 textLineHeight.onchange = (e) => {
     const size = parseFloat(e.target.value);
     textContainer.style.lineHeight = size;
-}
+};
+
+imageTextSwap.onclick = (e) => {
+    textSide = (textSide === 'right') ? 'left' : 'right';
+    positionTextAndVideo();
+};

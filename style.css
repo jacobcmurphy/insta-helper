@@ -25,18 +25,18 @@ html, body{
     width: 100%;
 }
 
+#camera-container {
+    position: relative;
+}
+
 #text-container {
     box-sizing: border-box;
     position: relative;
-    margin: 0 0 0 -1px;
+    margin: 0 1px 0 -1px;
     /* text-indent with padding on the left side allows wrapped text to look auto-indented */
     padding: 5px 5px 5px 25px;
     text-indent: -20px;
-    resize: none;
-    box-shadow: none;
-    outline: none;
-    border: none;
-    border-right: 1px solid #d2d5db;
+    border: 1px solid #d2d5db;
 }
 
 #camera-view, #camera-canvas, #camera-output {
