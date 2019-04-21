@@ -25,10 +25,13 @@ html, body{
     width: 100%;
 }
 
-textarea#text-container {
+#text-container {
+    box-sizing: border-box;
     position: relative;
     margin: 0 0 0 -1px;
-    padding: 5px;
+    /* text-indent with padding on the left side allows wrapped text to look auto-indented */
+    padding: 5px 5px 5px 25px;
+    text-indent: -20px;
     resize: none;
     box-shadow: none;
     outline: none;
