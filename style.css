@@ -42,7 +42,6 @@ html, body{
 #camera-view, #camera-canvas, #camera-output {
     position: absolute;
     transform: scaleX(-1);
-    filter: FlipH;
 }
 
 #control-buttons {

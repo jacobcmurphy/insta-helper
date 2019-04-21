@@ -111,10 +111,17 @@ cameraTrigger.onclick = () => {
 };
 
 cameraSwitch.onclick = () => {
+    const cameraElements = [cameraView, cameraCanvas, cameraOutput];
     if (facingMode === 'user') {
-        facingMode = 'environment'
+        facingMode = 'environment';
+        cameraElements.forEach((element) => {
+            element.style.transform = 'scaleX(1)';
+        });
     } else {
-        facingMode = 'user'
+        facingMode = 'user';
+        cameraElements.forEach((element) => {
+            element.style.transform = 'scaleX(-1)';
+        });
     }
     track.stop();
     runCamera();
