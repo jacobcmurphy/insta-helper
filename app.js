@@ -34,7 +34,8 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
     imageRatio = document.querySelector('#image-ratio'),
     textSize = document.querySelector('#text-size'),
     textColor = document.querySelector('#text-color'),
-    textBackgroundColor = document.querySelector('#text-background-color');
+    textBackgroundColor = document.querySelector('#text-background-color'),
+    textLineHeight = document.querySelector('#text-line-height');
 
 // enable tab usage in textContainer
 textContainer.onkeydown = (e) => {
@@ -141,3 +142,8 @@ textBackgroundColor.onchange = (e) => {
     const color = e.target.value;
     textContainer.style.backgroundColor = color;
 };
+
+textLineHeight.onchange = (e) => {
+    const size = parseFloat(e.target.value);
+    textContainer.style.lineHeight = size;
+}
