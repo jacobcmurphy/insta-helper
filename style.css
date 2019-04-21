@@ -26,13 +26,13 @@ html, body{
 }
 
 #camera-container {
-    position: relative;
+    position: absolute;
 }
 
 #text-container {
     box-sizing: border-box;
-    position: relative;
-    margin: 0 1px 0 -1px;
+    position: absolute;
+    margin: 0px 1px 0px -1px;
     /* text-indent with padding on the left side allows wrapped text to look auto-indented */
     padding: 5px 5px 5px 25px;
     text-indent: -20px;

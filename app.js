@@ -135,7 +135,7 @@ imageRatio.onchange = debounce((e) => {
     const ratio = parseInt(e.target.value) / 100;
     imageTextRatio = ratio;
     runCamera();
-}, 100);
+}, 1000);
 
 textSize.onchange = (e) => {
     const size = parseInt(e.target.value);
