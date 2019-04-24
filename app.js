@@ -26,7 +26,6 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
     cameraContainer = document.querySelector('#camera-container');
     textContainer = document.querySelector('#text-container');
     cameraView = document.querySelector('#camera-view'),
-    cameraOutput = document.querySelector('#camera-output'),
     cameraCanvas = document.querySelector('#camera-canvas'),
     cameraTrigger = document.querySelector('#camera-trigger'),
     cameraSwitch = document.querySelector('#camera-switch'),
@@ -39,26 +38,19 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
     textLineHeight = document.querySelector('#text-line-height'),
     imageTextSwap = document.querySelector('#image-text-swap');
 
-const getConstraints = () => {
+const getDimensions = () => {
     let height = cameraTextContainer.clientHeight;
     let width = cameraTextContainer.clientWidth;
     height = Math.min(height, width);
     width = height * imageTextRatio;
 
-    return {
-        video: {
-            facingMode,
-            height,
-            width,
-        },
-        audio: false,
-   };
+    return { height, width };
 };
 
 const positionTextAndVideo = () => {
-    const constraints = getConstraints();
-    const videoHeight = constraints.video.height;
-    const videoWidth = constraints.video.width;
+    const dimensions = getDimensions();
+    const videoHeight = dimensions.height;
+    const videoWidth = dimensions.width;
     const textWidth = videoHeight * (1 - imageTextRatio);
 
     textContainer.style.width = textWidth;
@@ -74,15 +66,16 @@ const positionTextAndVideo = () => {
 };
 
 const runCamera = () => {
-    const constraints = getConstraints();
+    const { height, width } = getDimensions();
+    const constraints = {
+        video: { facingMode, height, width, },
+        audio: false,
+    };
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            const height = constraints.video.height;
-            const width = constraints.video.width;
-
             positionTextAndVideo(width, height);
-            track = stream.getTracks()[0];
+            track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
         })
         .catch(console.error);
@@ -100,18 +93,16 @@ cameraTrigger.onclick = () => {
         cameraCanvas.width = cameraView.videoWidth;
         cameraCanvas.height = cameraView.videoHeight;
         cameraCanvas.getContext('2d').drawImage(cameraView, 0, 0);
-        cameraOutput.style.display = 'block';
-        cameraOutput.src = cameraCanvas.toDataURL('image/webp');
         cameraTrigger.innerText = 'Take a new picture';
     } else {
-        cameraOutput.style.display = 'none';
+        cameraCanvas.getContext('2d').clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
         cameraTrigger.innerText = 'Take a picture';
     }
     currentlyRunningCamera = !currentlyRunningCamera;
 };
 
 cameraSwitch.onclick = () => {
-    const cameraElements = [cameraView, cameraCanvas, cameraOutput];
+    const cameraElements = [cameraView, cameraCanvas];
     if (facingMode === 'user') {
         facingMode = 'environment';
         cameraElements.forEach((element) => {

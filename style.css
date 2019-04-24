@@ -29,6 +29,10 @@ html, body{
     position: absolute;
 }
 
+#camera-canvas {
+    z-index: 3;
+}
+
 #text-container {
     box-sizing: border-box;
     position: absolute;
@@ -39,7 +43,7 @@ html, body{
     border: 1px solid #d2d5db;
 }
 
-#camera-view, #camera-canvas, #camera-output {
+#camera-view, #camera-canvas {
     position: absolute;
     transform: scaleX(-1);
 }
