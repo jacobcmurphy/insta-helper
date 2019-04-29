@@ -29,6 +29,10 @@ html, body{
     position: absolute;
 }
 
+#camera-view {
+    visibility: hidden;
+}
+
 #camera-canvas {
     z-index: 3;
 }

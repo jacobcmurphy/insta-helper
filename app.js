@@ -74,7 +74,7 @@ const runCamera = () => {
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            positionTextAndVideo(width, height);
+            positionTextAndVideo();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
         })
