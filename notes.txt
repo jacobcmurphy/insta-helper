@@ -1,6 +1,5 @@
 Wants:
-* fix video ratio on Firefox and mobile
-    * see https://developertip.wordpress.com/2011/06/04/tuto-html5-how-to-crop-a-video-tag-into-a-canvas-tag/
+* fix no picture after camera switch
 * swap image/text side
 * image filters
 

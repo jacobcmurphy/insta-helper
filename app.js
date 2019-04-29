@@ -41,6 +41,9 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
 
 const getDimensions = () => {
     let { height, width } = track.getSettings();
+    height = Math.min(height, cameraTextContainer.clientHeight);
+    width = Math.min(width, cameraTextContainer.clientWidth);
+
     height = Math.min(height, width);
     width = height * imageTextRatio;
 
@@ -69,9 +72,11 @@ const streamScaledVideo = () => {
     const { height, width } = getDimensions();
 
     // map the center of the video stream to the canvas
-    let clipX = (track.getSettings().width - width) / 2;
+    const videoStreamDimensions = track.getSettings();
+    const clipX = (videoStreamDimensions.width - width) / 2;
+    const clipY = (videoStreamDimensions.height - height) / 2;
 
-    cameraCanvas.getContext('2d').drawImage(cameraView, clipX, 0, width, height, 0, 0, width, height);
+    cameraCanvas.getContext('2d').drawImage(cameraView, clipX, clipY, width, height, 0, 0, width, height);
     streamingTimeout = setTimeout(streamScaledVideo, 1000 / 30);
 }
 
@@ -116,19 +121,20 @@ cameraTrigger.onclick = () => {
 
 cameraSwitch.onclick = () => {
     const cameraElements = [cameraView, cameraCanvas];
-    if (facingMode === 'user') {
-        facingMode = 'environment';
-        cameraElements.forEach((element) => {
-            element.style.transform = 'scaleX(1)';
-        });
-    } else {
-        facingMode = 'user';
-        cameraElements.forEach((element) => {
-            element.style.transform = 'scaleX(-1)';
-        });
-    }
+    facingMode = facingMode === 'user' ? 'environment' : 'user';
+
     track.stop();
-    runCamera();
+    runCamera().then(() => {
+        if (facingMode === 'user') {
+            cameraElements.forEach((element) => {
+                element.style.transform = 'scaleX(1)';
+            });
+        } else {
+            cameraElements.forEach((element) => {
+                element.style.transform = 'scaleX(-1)';
+            });
+        }
+    });
 };
 
 toolToggle.onclick = () => {
