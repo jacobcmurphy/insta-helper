@@ -1,6 +1,7 @@
-let facingMode = 'user';
 let currentlyRunningCamera = true;
 let track = null;
+let streamingTimeout = null;
+let facingMode = 'user';
 let imageTextRatio = 0.6;
 let toolsShowing = false;
 let textSide = 'right';
@@ -65,6 +66,11 @@ const positionTextAndVideo = () => {
     }
 };
 
+const streamScaledVideo = () => {
+    cameraCanvas.getContext('2d').drawImage(cameraView, 320, 0, 320, 180, 0, 0, 640, 360);
+    streamingTimeout = setTimeout(streamScaledVideo, 1000 / 30);
+}
+
 const runCamera = () => {
     const { height, width } = getDimensions();
     const constraints = {
@@ -77,6 +83,7 @@ const runCamera = () => {
             positionTextAndVideo();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
+            streamScaledVideo();
         })
         .catch(console.error);
 };
@@ -92,10 +99,12 @@ cameraTrigger.onclick = () => {
     if (currentlyRunningCamera) {
         cameraCanvas.width = cameraView.videoWidth;
         cameraCanvas.height = cameraView.videoHeight;
+        clearTimeout(streamingTimeout);
         cameraCanvas.getContext('2d').drawImage(cameraView, 0, 0);
         cameraTrigger.innerText = 'Take a new picture';
     } else {
         cameraCanvas.getContext('2d').clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
+        streamScaledVideo();
         cameraTrigger.innerText = 'Take a picture';
     }
     currentlyRunningCamera = !currentlyRunningCamera;
