@@ -40,8 +40,7 @@ const cameraTextContainer = document.querySelector('#camera-and-text-container')
     imageTextSwap = document.querySelector('#image-text-swap');
 
 const getDimensions = () => {
-    let height = cameraTextContainer.clientHeight;
-    let width = cameraTextContainer.clientWidth;
+    let { height, width } = track.getSettings();
     height = Math.min(height, width);
     width = height * imageTextRatio;
 
@@ -67,22 +66,31 @@ const positionTextAndVideo = () => {
 };
 
 const streamScaledVideo = () => {
-    cameraCanvas.getContext('2d').drawImage(cameraView, 320, 0, 320, 180, 0, 0, 640, 360);
+    const { height, width } = getDimensions();
+
+    // map the center of the video stream to the canvas
+    let clipX = (track.getSettings().width - width) / 2;
+
+    cameraCanvas.getContext('2d').drawImage(cameraView, clipX, 0, width, height, 0, 0, width, height);
     streamingTimeout = setTimeout(streamScaledVideo, 1000 / 30);
 }
 
 const runCamera = () => {
-    const { height, width } = getDimensions();
     const constraints = {
-        video: { facingMode, height, width, },
+        video: { facingMode },
         audio: false,
     };
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            positionTextAndVideo();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
+
+            const { height, width } = getDimensions();
+            cameraCanvas.height = height;
+            cameraCanvas.width = width;
+
+            positionTextAndVideo();
             streamScaledVideo();
         })
         .catch(console.error);
@@ -97,13 +105,9 @@ window.addEventListener('load', () => {
 // Control buttons
 cameraTrigger.onclick = () => {
     if (currentlyRunningCamera) {
-        cameraCanvas.width = cameraView.videoWidth;
-        cameraCanvas.height = cameraView.videoHeight;
         clearTimeout(streamingTimeout);
-        cameraCanvas.getContext('2d').drawImage(cameraView, 0, 0);
         cameraTrigger.innerText = 'Take a new picture';
     } else {
-        cameraCanvas.getContext('2d').clearRect(0, 0, cameraCanvas.width, cameraCanvas.height);
         streamScaledVideo();
         cameraTrigger.innerText = 'Take a picture';
     }
