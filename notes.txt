@@ -1,6 +1,5 @@
 Wants:
-* fix no picture after camera switch
-* swap image/text side
+* fix no picture taking after camera switch
 * image filters
 
 For picture filters: http://camanjs.com/

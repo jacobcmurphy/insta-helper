@@ -109,8 +109,9 @@ window.addEventListener('load', () => {
 
 // Control buttons
 cameraTrigger.onclick = () => {
+    clearTimeout(streamingTimeout);
+
     if (currentlyRunningCamera) {
-        clearTimeout(streamingTimeout);
         cameraTrigger.innerText = 'Take a new picture';
     } else {
         streamScaledVideo();

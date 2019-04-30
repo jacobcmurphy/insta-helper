@@ -30,7 +30,7 @@ html, body{
 }
 
 #camera-view {
-    visibility: hidden;
+    display: none;
 }
 
 #camera-canvas {
