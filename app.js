@@ -77,6 +77,8 @@ const streamScaledVideo = () => {
     const clipY = (videoStreamDimensions.height - height) / 2;
 
     cameraCanvas.getContext('2d').drawImage(cameraView, clipX, clipY, width, height, 0, 0, width, height);
+
+    if (streamingTimeout) clearTimeout(streamingTimeout);
     streamingTimeout = setTimeout(streamScaledVideo, 1000 / 30);
 }
 
@@ -88,6 +90,7 @@ const runCamera = () => {
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
+            if (track) track.stop();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
 
@@ -96,6 +99,7 @@ const runCamera = () => {
             cameraCanvas.width = width;
 
             positionTextAndVideo();
+            currentlyRunningCamera = true;
             streamScaledVideo();
         })
         .catch(console.error);
@@ -109,9 +113,8 @@ window.addEventListener('load', () => {
 
 // Control buttons
 cameraTrigger.onclick = () => {
-    clearTimeout(streamingTimeout);
-
     if (currentlyRunningCamera) {
+        clearTimeout(streamingTimeout);
         cameraTrigger.innerText = 'Take a new picture';
     } else {
         streamScaledVideo();
@@ -121,20 +124,13 @@ cameraTrigger.onclick = () => {
 };
 
 cameraSwitch.onclick = () => {
-    const cameraElements = [cameraView, cameraCanvas];
-    facingMode = facingMode === 'user' ? 'environment' : 'user';
+    facingMode = (facingMode === 'user') ? 'environment' : 'user';
+    cameraTrigger.innerText = 'Take a picture';
 
-    track.stop();
+    const cameraElements = [cameraView, cameraCanvas];
     runCamera().then(() => {
-        if (facingMode === 'user') {
-            cameraElements.forEach((element) => {
-                element.style.transform = 'scaleX(1)';
-            });
-        } else {
-            cameraElements.forEach((element) => {
-                element.style.transform = 'scaleX(-1)';
-            });
-        }
+        const transform = (facingMode === 'user') ? 'scaleX(-1)' : 'scaleX(1)';
+        cameraElements.forEach((element) => element.style.transform = transform);
     });
 };
 
