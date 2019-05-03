@@ -56,19 +56,13 @@ const getDimensions = () => {
 const positionTextAndVideo = () => {
     const dimensions = getDimensions();
     const videoHeight = dimensions.height;
-    const videoWidth = dimensions.width;
     const textWidth = videoHeight * (1 - imageTextRatio);
 
     textContainer.style.width = textWidth;
     textContainer.style.height = videoHeight;
 
-    if (textSide === 'right') {
-        textContainer.style.left = videoWidth;
-        cameraCanvas.style.left = 0;
-    } else {
-        textContainer.style.left = 0;
-        cameraCanvas.style.left = textWidth;
-    }
+    const flexDirection = (textSide === 'right') ? 'row' : 'row-reverse';
+    saveArea.style.flexDirection = flexDirection;
 };
 
 const streamScaledVideo = () => {
@@ -154,8 +148,9 @@ saveImage.onclick = () => {
     };
 
     html2canvas(saveArea).then((canvas) => {
-        const d = new Date();
-        const downloadName = `instahelper-${d.toISOString().replace(/[:.T]/g, '-')}.png`;
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().replace(/[:.T]/g, '-');
+        const downloadName = `instahelper-${formattedDate}.png`;
         saveAs(canvas.toDataURL(), downloadName);
     });
 };

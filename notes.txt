@@ -1,5 +1,5 @@
 Wants:
-* fix no picture taking after camera switch
+* fix camera not actually changing on a mobile device
 * image filters
 
 For picture filters: http://camanjs.com/
