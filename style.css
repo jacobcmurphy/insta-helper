@@ -25,6 +25,7 @@ html, body{
 
 #camera-and-text-container {
     position: fixed;
+    flex-direction: row;
     height: 90%;
     width: 100%;
 }
@@ -32,24 +33,27 @@ html, body{
 #save-area {
     height: auto;
     width: auto;
+    display: flex;
+    float: left;
 }
 
 #camera-canvas {
-    position: absolute;
-}
-
-#camera-view, #camera-canvas {
-    transform: scaleX(-1);
+    position: relative;
 }
 
 #text-container {
     position: relative;
     box-sizing: border-box;
     border: 1px solid #d2d5db;
-    margin: 0 1px 0 -1px;
+    margin: 0;
     /* text-indent with padding on the left side allows wrapped text to look auto-indented */
     padding: 5px 5px 5px 25px;
     text-indent: -20px;
+}
+
+
+#camera-view, #camera-canvas {
+    transform: scaleX(-1);
 }
 
 #control-buttons {
