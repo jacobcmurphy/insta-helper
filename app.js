@@ -23,17 +23,18 @@ const debounce = (func, wait) => {
   };
 };
 
-const cameraTextContainer = document.querySelector('#camera-and-text-container'),
+const cameraView = document.querySelector('#camera-view'),
+    cameraTextContainer = document.querySelector('#camera-and-text-container'),
     saveArea = document.querySelector('#save-area'),
-    cameraContainer = document.querySelector('#camera-container');
-    textContainer = document.querySelector('#text-container');
-    cameraView = document.querySelector('#camera-view'),
     cameraCanvas = document.querySelector('#camera-canvas'),
+    textContainer = document.querySelector('#text-container'),
+
     cameraTrigger = document.querySelector('#camera-trigger'),
     cameraSwitch = document.querySelector('#camera-switch'),
     saveImage = document.querySelector('#image-save'),
-    toolsContainer = document.querySelector('#tools-container'),
     toolToggle = document.querySelector('#tool-toggle'),
+
+    toolsContainer = document.querySelector('#tools-container'),
     imageRatio = document.querySelector('#image-ratio'),
     textSize = document.querySelector('#text-size'),
     textColor = document.querySelector('#text-color'),
@@ -63,10 +64,10 @@ const positionTextAndVideo = () => {
 
     if (textSide === 'right') {
         textContainer.style.left = videoWidth;
-        cameraContainer.style.left = 0;
+        cameraCanvas.style.left = 0;
     } else {
         textContainer.style.left = 0;
-        cameraContainer.style.left = textWidth;
+        cameraCanvas.style.left = textWidth;
     }
 };
 
@@ -153,8 +154,9 @@ saveImage.onclick = () => {
     };
 
     html2canvas(saveArea).then((canvas) => {
-        console.log(canvas); // TODO - remove this line
-        saveAs(canvas.toDataURL(), 'instahelper.png');
+        const d = new Date();
+        const downloadName = `instahelper-${d.toISOString().replace(/[:.T]/g, '-')}.png`;
+        saveAs(canvas.toDataURL(), downloadName);
     });
 };
 

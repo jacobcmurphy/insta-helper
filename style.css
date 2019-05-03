@@ -5,6 +5,10 @@ html, body{
   width: 100%;
 }
 
+#camera-view {
+    display: none;
+}
+
 #tools-container {
     box-sizing: border-box;
     display: none;
@@ -20,7 +24,7 @@ html, body{
 }
 
 #camera-and-text-container {
-    position: absolute;
+    position: fixed;
     height: 90%;
     width: 100%;
 }
@@ -30,31 +34,22 @@ html, body{
     width: auto;
 }
 
-#camera-container {
-    position: relative;
-}
-
 #camera-canvas {
     position: absolute;
 }
-
-#camera-view {
-    display: none;
-}
-
 
 #camera-view, #camera-canvas {
     transform: scaleX(-1);
 }
 
 #text-container {
-    box-sizing: border-box;
     position: relative;
+    box-sizing: border-box;
+    border: 1px solid #d2d5db;
     margin: 0 1px 0 -1px;
     /* text-indent with padding on the left side allows wrapped text to look auto-indented */
     padding: 5px 5px 5px 25px;
     text-indent: -20px;
-    border: 1px solid #d2d5db;
 }
 
 #control-buttons {
@@ -77,11 +72,12 @@ html, body{
     text-align: center;
 }
 
+.control-button:last-child {
+    border-right: 1px solid black;
+}
+
 .control-button:hover {
     background-color: white;
     color: black;
 }
 
-.control-button:last-child {
-    border-right: 1px solid black;
-}

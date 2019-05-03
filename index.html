@@ -8,6 +8,7 @@
 		<link rel='stylesheet' href='style.css'>
 	</head>
 	<body>
+			<video id='camera-view' autoplay playsinline></video>
 			<div id='tools-container'>
 				<label for='image-ratio'>Image to Text Ratio</label>
 				<input type='number' id='image-ratio' min='25' max='75'>&nbsp;%
@@ -28,11 +29,8 @@
 			</div>
 			<div id='camera-and-text-container'>
 				<div id='save-area'>
-					<div id='camera-container'>
-						<canvas id='camera-canvas'></canvas>
-						<video id='camera-view' autoplay playsinline></video>
-					</div>
-					<p id='text-container' contenteditable="true"></p>
+					<canvas id='camera-canvas'></canvas>
+					<p id='text-container' contenteditable='true'></p>
 				</div>
 			</div>
 			<div id='control-buttons'>
@@ -40,7 +38,6 @@
 					--><button id='camera-switch' class='control-button'>Switch Camera</button><!--
 					--><button id='image-save' class='control-button'>Save</button><!--
 					--><button id='tool-toggle' class='control-button'>Show Options</button>
-
 		  </div>
 
 		<!-- custom code -->
