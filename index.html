@@ -27,14 +27,20 @@
 				<button id='image-text-swap'>Change the sides of the image/text</button>
 			</div>
 			<div id='camera-and-text-container'>
-				<div id='camera-container'>
-			    <canvas id='camera-canvas'></canvas>
-			    <video id='camera-view' autoplay playsinline></video>
-			  </div>
-		  	<p id='text-container' contenteditable="true"></p>
+				<div id='save-area'>
+					<div id='camera-container'>
+						<canvas id='camera-canvas'></canvas>
+						<video id='camera-view' autoplay playsinline></video>
+					</div>
+					<p id='text-container' contenteditable="true"></p>
+				</div>
 			</div>
 			<div id='control-buttons'>
-			    <button id='camera-trigger' class='control-button'>Take a picture</button><button id='camera-switch' class='control-button'>Switch Camera</button><button id='tool-toggle' class='control-button'>Show Options</button>
+					<button id='camera-trigger' class='control-button'>Take a picture</button><!--
+					--><button id='camera-switch' class='control-button'>Switch Camera</button><!--
+					--><button id='image-save' class='control-button'>Save</button><!--
+					--><button id='tool-toggle' class='control-button'>Show Options</button>
+
 		  </div>
 
 		<!-- custom code -->
@@ -42,6 +48,10 @@
 
 		<!-- color picker -->
 		<script src='jscolor.js'></script>
+
+		<!-- saving functionality -->
+		<script src='html2canvas.js'></script>
+		<script src='save_image.js'></script>
 
 		<!-- Image filters -->
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js'></script>

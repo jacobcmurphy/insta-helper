@@ -23,13 +23,15 @@ const debounce = (func, wait) => {
   };
 };
 
-const cameraTextContainer = document.querySelector('#camera-and-text-container');
+const cameraTextContainer = document.querySelector('#camera-and-text-container'),
+    saveArea = document.querySelector('#save-area'),
     cameraContainer = document.querySelector('#camera-container');
     textContainer = document.querySelector('#text-container');
     cameraView = document.querySelector('#camera-view'),
     cameraCanvas = document.querySelector('#camera-canvas'),
     cameraTrigger = document.querySelector('#camera-trigger'),
     cameraSwitch = document.querySelector('#camera-switch'),
+    saveImage = document.querySelector('#image-save'),
     toolsContainer = document.querySelector('#tools-container'),
     toolToggle = document.querySelector('#tool-toggle'),
     imageRatio = document.querySelector('#image-ratio'),
@@ -131,6 +133,28 @@ cameraSwitch.onclick = () => {
     runCamera().then(() => {
         const transform = (facingMode === 'user') ? 'scaleX(-1)' : 'scaleX(1)';
         cameraElements.forEach((element) => element.style.transform = transform);
+    });
+};
+
+saveImage.onclick = () => {
+    const saveAs = (uri, filename) => {
+        const link = document.createElement('a');
+
+        if (typeof link.download === 'string') {
+            link.href = uri;
+            link.download = filename;
+
+            document.body.appendChild(link); // Firefox hack
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            window.open(uri);
+        }
+    };
+
+    html2canvas(saveArea).then((canvas) => {
+        console.log(canvas); // TODO - remove this line
+        saveAs(canvas.toDataURL(), 'instahelper.png');
     });
 };
 
