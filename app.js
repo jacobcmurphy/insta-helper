@@ -1,7 +1,7 @@
 let currentlyRunningCamera = true;
 let track = null;
 let streamingTimeout = null;
-let facingMode = 'user';
+let facingMode = 'environment';
 let imageTextRatio = 0.6;
 let toolsShowing = false;
 let textSide = 'right';
@@ -80,14 +80,16 @@ const streamScaledVideo = () => {
 }
 
 const runCamera = () => {
+    if (track) track.stop();
+
     const constraints = {
         video: { facingMode },
         audio: false,
     };
+
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            if (track) track.stop();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
 
