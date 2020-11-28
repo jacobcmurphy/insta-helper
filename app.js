@@ -1,10 +1,30 @@
-let currentlyRunningCamera = true;
-let track = null;
-let streamingTimeout = null;
-let facingMode = 'user';
-let imageTextRatio = 0.6;
-let toolsShowing = false;
-let textSide = 'right';
+const cameraView = document.querySelector('#camera-view'),
+    cameraTextContainer = document.querySelector('#camera-and-text-container'),
+    saveArea = document.querySelector('#save-area'),
+    cameraCanvas = document.querySelector('#camera-canvas'),
+    textContainer = document.querySelector('#text-container'),
+
+    cameraTrigger = document.querySelector('#camera-trigger'),
+    cameraSwitch = document.querySelector('#camera-switch'),
+    saveImage = document.querySelector('#image-save'),
+    toolToggle = document.querySelector('#tool-toggle'),
+
+    toolsContainer = document.querySelector('#tools-container'),
+    imageRatio = document.querySelector('#image-ratio'),
+    textSize = document.querySelector('#text-size'),
+    textColor = document.querySelector('#text-color'),
+    textBackgroundColor = document.querySelector('#text-background-color'),
+    textLineHeight = document.querySelector('#text-line-height'),
+    imageFilter = document.querySelector('#image-filter'),
+    imageTextSwap = document.querySelector('#image-text-swap');
+
+let currentlyRunningCamera = true,
+    track = null,
+    streamingTimeout = null,
+    facingMode = 'user',
+    imageTextRatio = 0.6,
+    toolsShowing = true,
+    textSide = 'right';
 
 const debounce = (func, wait) => {
   let timeout;
@@ -23,29 +43,18 @@ const debounce = (func, wait) => {
   };
 };
 
-const cameraView = document.querySelector('#camera-view'),
-    cameraTextContainer = document.querySelector('#camera-and-text-container'),
-    saveArea = document.querySelector('#save-area'),
-    cameraCanvas = document.querySelector('#camera-canvas'),
-    textContainer = document.querySelector('#text-container'),
-
-    cameraTrigger = document.querySelector('#camera-trigger'),
-    cameraSwitch = document.querySelector('#camera-switch'),
-    saveImage = document.querySelector('#image-save'),
-    toolToggle = document.querySelector('#tool-toggle'),
-
-    toolsContainer = document.querySelector('#tools-container'),
-    imageRatio = document.querySelector('#image-ratio'),
-    textSize = document.querySelector('#text-size'),
-    textColor = document.querySelector('#text-color'),
-    textBackgroundColor = document.querySelector('#text-background-color'),
-    textLineHeight = document.querySelector('#text-line-height'),
-    imageTextSwap = document.querySelector('#image-text-swap');
-
 const getDimensions = () => {
-    let { height, width } = track.getSettings();
-    height = Math.min(height, cameraTextContainer.clientHeight);
-    width = Math.min(width, cameraTextContainer.clientWidth);
+    let height = cameraTextContainer.clientHeight;
+    let width = cameraTextContainer.clientWidth;
+    let trackHeight = height;
+    let trackWidth = width;
+    if (track) {
+        const trackSettings = track.getSettings();
+        trackHeight = trackSettings.height;
+        trackWidth = trackSettings.width;
+    }
+    height = Math.min(trackHeight, height);
+    width = Math.min(trackWidth, width);
 
     height = Math.min(height, width);
     width = height * imageTextRatio;
@@ -65,6 +74,18 @@ const positionTextAndVideo = () => {
     saveArea.style.flexDirection = flexDirection;
 };
 
+const stopCamera = () => {
+    if (streamingTimeout) clearTimeout(streamingTimeout);
+    if (track) {
+        track.stop();
+        track = null;
+    }
+    currentlyRunningCamera = false;
+    cameraTrigger.innerText = 'Take a new picture';
+    imageFilter.disabled = false;
+    imageFilter.value = 'none';
+}
+
 const streamScaledVideo = () => {
     const { height, width } = getDimensions();
 
@@ -79,9 +100,7 @@ const streamScaledVideo = () => {
     streamingTimeout = setTimeout(streamScaledVideo, 1000 / 30);
 }
 
-const runCamera = () => {
-    if (track) track.stop();
-
+const startCamera = () => {
     const constraints = {
         video: { facingMode },
         audio: false,
@@ -90,6 +109,7 @@ const runCamera = () => {
     return navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
+            if (track) track.stop();
             track = stream.getVideoTracks()[0];
             cameraView.srcObject = stream;
 
@@ -97,8 +117,10 @@ const runCamera = () => {
             cameraCanvas.height = height;
             cameraCanvas.width = width;
 
-            positionTextAndVideo();
             currentlyRunningCamera = true;
+            cameraTrigger.innerText = 'Take a picture';
+            imageFilter.disabled = true;
+            positionTextAndVideo();
             streamScaledVideo();
         })
         .catch(console.error);
@@ -107,7 +129,7 @@ const runCamera = () => {
 window.addEventListener('load', () => {
     imageRatio.value = imageTextRatio * 100;
     textSize.value = textContainer.style.fontSize;
-    runCamera();
+    startCamera();
 }, false);
 
 // Control buttons
@@ -115,12 +137,10 @@ cameraTrigger.onclick = () => {
     clearTimeout(streamingTimeout);
 
     if (currentlyRunningCamera) {
-        cameraTrigger.innerText = 'Take a new picture';
+        stopCamera();
     } else {
-        streamScaledVideo();
-        cameraTrigger.innerText = 'Take a picture';
+        startCamera();
     }
-    currentlyRunningCamera = !currentlyRunningCamera;
 };
 
 cameraSwitch.onclick = () => {
@@ -128,7 +148,7 @@ cameraSwitch.onclick = () => {
     cameraTrigger.innerText = 'Take a picture';
 
     const cameraElements = [cameraView, cameraCanvas];
-    runCamera().then(() => {
+    startCamera().then(() => {
         const transform = (facingMode === 'user') ? 'scaleX(-1)' : 'scaleX(1)';
         cameraElements.forEach((element) => element.style.transform = transform);
     });
@@ -170,10 +190,77 @@ toolToggle.onclick = () => {
 };
 
 // Tools
+imageFilter.onchange = (e) => {
+    const filterName = e.target.value;
+    Caman('#camera-canvas', function () {
+        this.reloadCanvasData();
+
+        switch(filterName) {
+            case 'Vintage':
+                this.vintage();
+                break;
+            case 'Lomo':
+                this.lomo();
+                break;
+            case 'Clarity':
+                this.clarity();
+                break;
+            case 'Sin City':
+                this.sinCity();
+                break;
+            case 'Sunrise':
+                this.sunrise();
+                break;
+            case 'Cross Process':
+                this.crossProcess();
+                break;
+            case 'Orange Peel':
+                this.orangePeel();
+                break;
+            case 'Love':
+                this.love();
+                break;
+            case 'Grungy':
+                this.grungy();
+                break;
+            case 'Jarques':
+                this.jarques();
+                break;
+            case 'Pinhole':
+                this.pinhole();
+                break;
+            case 'Old Boot':
+                this.oldBoot();
+                break;
+            case 'Glowing Sun':
+                this.glowingSun();
+                break;
+            case 'Hazy Days':
+                this.hazyDays();
+                break;
+            case 'Her Majesty':
+                this.herMajesty();
+                break;
+            case 'Nostalgia':
+                this.nostalgia();
+                break;
+            case 'Hemingway':
+                this.hemingway();
+                break;
+            case 'Concentrate':
+                this.concentrate();
+                break;
+            default:
+                this.revert();         
+        }
+        this.render();
+    });
+};
+
 imageRatio.onchange = debounce((e) => {
     const ratio = parseInt(e.target.value) / 100;
     imageTextRatio = ratio;
-    runCamera();
+    startCamera();
 }, 1000);
 
 textSize.oninput = (e) => {
@@ -200,3 +287,6 @@ imageTextSwap.onclick = (e) => {
     textSide = (textSide === 'right') ? 'left' : 'right';
     positionTextAndVideo();
 };
+
+// Fix sizing on events like device rotation
+window.addEventListener('resize', debounce(startCamera, 100));

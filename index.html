@@ -10,9 +10,29 @@
 	<body>
 			<video id='camera-view' autoplay playsinline></video>
 			<div id='tools-container'>
-				<label for='image-ratio'>Image to Text Ratio</label>
-				<input type='number' id='image-ratio' min='25' max='75'>&nbsp;%
-				<br/><br/>
+				<label for='image-filter'>Picture Filter</label>
+				<select id='image-filter'>
+					<option value='none'>No filter</option>
+					<option value='Vintage'>Vintage</option>
+					<option value='Lomo'>Lomo</option>
+					<option value='Clarity'>Clarity</option>
+					<option value='Sin City'>Sin City</option>
+					<option value='Sunrise'>Sunrise</option>
+					<option value='Cross Process'>Cross Process</option>
+					<option value='Orange Peel'>Orange Peel</option>
+					<option value='Love'>Love</option>
+					<option value='Grungy'>Grungy</option>
+					<option value='Jarques'>Jarques</option>
+					<option value='Pinhole'>Pinhole</option>
+					<option value='Old Boot'>Old Boot</option>
+					<option value='Glowing Sun'>Glowing Sun</option>
+					<option value='Hazy Days'>Hazy Days</option>
+					<option value='Her Majesty'>Her Majesty</option>
+					<option value='Nostalgia'>Nostalgia</option>
+					<option value='Hemingway'>Hemingway</option>
+					<option value='Concentrate'>Concentrate</option>
+				</select>
+				<br/>
 				<label for='text-size'>Text size (px)</label>
 				<input type='number' id='text-size' min='10' max='99'>
 				<br/>
@@ -24,6 +44,10 @@
 				<br/>
 				<label for='text-line-height'>Text line height</label>
 				<input type='number' id='text-line-height' step='0.1' value='1.0' min='.5' max='3.0'>
+				<br />
+				<label for='image-ratio'>Picture to Text Ratio</label>
+				<input type='number' id='image-ratio' min='25' max='75'>&nbsp;%
+				<br/>
 				<br/><br/>
 				<button id='image-text-swap'>Change the sides of the image/text</button>
 			</div>
@@ -34,11 +58,11 @@
 				</div>
 			</div>
 			<div id='control-buttons'>
-					<button id='camera-trigger' class='control-button'>Take a picture</button><!--
-					--><button id='camera-switch' class='control-button'>Switch Camera</button><!--
-					--><button id='image-save' class='control-button'>Save</button><!--
-					--><button id='tool-toggle' class='control-button'>Show Options</button>
-		  </div>
+				<button id='camera-trigger' class='control-button'>Take a picture</button><!--
+				--><button id='camera-switch' class='control-button'>Switch Camera</button><!--
+				--><button id='image-save' class='control-button'>Save</button><!--
+				--><button id='tool-toggle' class='control-button'>Hide Options</button>
+			</div>
 
 		<!-- custom code -->
 		<script src='app.js'></script>
@@ -50,6 +74,6 @@
 		<script src='html2canvas.js'></script>
 
 		<!-- Image filters -->
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js'></script>
 	</body>
 </html>
