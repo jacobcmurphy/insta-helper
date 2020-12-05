@@ -144,8 +144,9 @@ cameraTrigger.onclick = () => {
 };
 
 cameraSwitch.onclick = () => {
+    clearTimeout(streamingTimeout);
+
     facingMode = (facingMode === 'user') ? 'environment' : 'user';
-    cameraTrigger.innerText = 'Take a picture';
 
     const cameraElements = [cameraView, cameraCanvas];
     startCamera().then(() => {
