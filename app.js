@@ -293,5 +293,5 @@ imageTextSwap.onclick = (e) => {
     positionTextAndVideo();
 };
 
-// Fix sizing on device rotation
-window.addEventListener('devicemotion', startCamera, 100);
+// Fix sizing on events like device rotation
+window.addEventListener('devicemotion', positionTextAndVideo);
