@@ -101,6 +101,12 @@ const streamScaledVideo = () => {
 }
 
 const startCamera = () => {
+    if (streamingTimeout) clearTimeout(streamingTimeout);
+    if (track) {
+        track.stop();
+        track = null;
+    }
+
     const constraints = {
         video: { facingMode },
         audio: false,
@@ -144,8 +150,6 @@ cameraTrigger.onclick = () => {
 };
 
 cameraSwitch.onclick = () => {
-    clearTimeout(streamingTimeout);
-
     facingMode = (facingMode === 'user') ? 'environment' : 'user';
 
     const cameraElements = [cameraView, cameraCanvas];
